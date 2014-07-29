@@ -1,4 +1,4 @@
-# dgrebb bash scripts
+# dgrebb shell scripts
 
 ## apache, mysql, php
 
