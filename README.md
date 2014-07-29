@@ -2,7 +2,7 @@
 
 ## apache, mysql, php
 
-* `amp-setup` - installs a configures homebrew, apache, mysql, and php.
+* `amp-setup` - installs and configures homebrew, apache, mysql, and php.
 
 ## wordpress
 

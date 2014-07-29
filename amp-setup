@@ -1,35 +1,35 @@
 #!/bin/bash
 
-## installs and sets up homebrew, apache, mysql, and php on a mac
+# installs and sets up homebrew, apache, mysql, and php on a mac
 
-# echo ''
-# echo 'Installing and configuring Homebrew.'
-# echo ''
+echo ''
+echo 'Installing and configuring Homebrew.'
+echo ''
 
-# # install homebrew
-# ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+# install homebrew
+ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 
-# echo ''
-# echo 'Checking system and updating Homebrew.'
-# echo ''
+echo ''
+echo 'Checking system and updating Homebrew.'
+echo ''
 
-# # set up homebrew
-# brew doctor
-# brew update
-# brew upgrade
+# set up homebrew
+brew doctor
+brew update
+brew upgrade
 
-# echo ''
-# echo 'Installing PHP.'
+echo ''
+echo 'Installing PHP.'
 
-# # tap some brew and install php
-# brew tap homebrew/dupes
-# brew tap homebrew/versions
-# brew tap homebrew/homebrew-php
-# brew install php55
+# tap some brew and install php
+brew tap homebrew/dupes
+brew tap homebrew/versions
+brew tap homebrew/homebrew-php
+brew install php55
 
-# echo ''
-# echo 'PHP successfully installed.'
-# echo ''
+echo ''
+echo 'PHP successfully installed.'
+echo ''
 
 # create php.ini from default if it doesn't exist
 if [ ! -f /etc/php.ini ]; then
@@ -46,7 +46,37 @@ sudo sed -i '' '$ a\
 date.timezone = "America/New_York"
 ' /etc/php.ini
 
-# # make apache use the php 5 module
-# echo 'setting apache up for php5 module'
-# echo ''
-# sed -i 's,#LoadModule php5_module /etc/apache2/libphp5.so,LoadModule php5_module /etc/apache2/libphp5.so,g' httpd.conf
+# install mysql
+brew install mysql
+
+echo ''
+echo 'MySQL installed.'
+echo ''
+
+# set mysql to start at login
+ln -sfv /usr/local/opt/mysql/*.plist ~/Library/LaunchAgents
+launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.mysql.plist
+
+# start or restart mysql
+mysql.server stop
+mysql.server start
+
+# make apache use the php 5 module
+echo 'Setting Apache up for php5 module.'
+echo ''
+sudo sed -i '' 's,#LoadModule php5_module libexec/apache2/libphp5.so,LoadModule php5_module libexec/apache2/libphp5.so,g' /etc/apache2/httpd.conf
+
+# make apache include the virtual hosts file
+echo 'Adding Apache virtual hosts include.'
+echo ''
+sudo sed -i '' 's,#Include /private/etc/apache2/extra/httpd-vhosts.conf,Include /private/etc/apache2/extra/httpd-vhosts.conf,g' /etc/apache2/httpd.conf
+
+echo ''
+echo 'Restarting Apache...'
+echo ''
+
+# restart apache
+sudo apachectl restart
+
+echo ''
+echo 'Configuration complete.'
