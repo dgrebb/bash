@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# todo
+# 1. add mcrypt installation because Craft
+# 2. add a command to uncomment #NameVirtualHost *:80 in /etc/apache2/extra/httpd-vhosts.conf if it is commented out
+
 # installs and sets up homebrew, apache, mysql, and php on a mac
 
 echo ''
